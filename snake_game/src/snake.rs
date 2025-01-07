@@ -1,24 +1,36 @@
-use std::collections::LinkedList;
-use crate::{Block, Direction, HEIGHT, WIDTH};
+#[derive(Clone, PartialEq)]
+pub enum Direction {
+    Up,
+    Down,
+    Left,
+    Right,
+}
+
+#[derive(Clone, Copy)]
+pub struct Block {
+    pub x: i32,
+    pub y: i32,
+}
 
 pub struct Snake {
-    pub body: LinkedList<Block>,
+    pub body: std::collections::LinkedList<Block>,
     pub dir: Direction,
 }
 
 impl Snake {
-    pub fn new(x: i32, y: i32) -> Snake {
-        let mut body: LinkedList<Block> = LinkedList::new();
+    pub fn new(x: i32, y: i32) -> Self {
+        let mut body: std::collections::LinkedList<Block> = std::collections::LinkedList::new();
         body.push_back(Block { x, y });
         body.push_back(Block { x: x - 1, y });
-        Snake {
+
+        Self {
             body,
             dir: Direction::Right,
         }
     }
 
     pub fn move_forward(&mut self, grow: bool) {
-        let mut new_head = (*self.body.front().expect("Snake has no body")).clone();
+        let mut new_head = (*self.body.front().unwrap()).clone();
 
         match self.dir {
             Direction::Up => new_head.y -= 1,
@@ -45,7 +57,7 @@ impl Snake {
 
     pub fn check_collision(&self) -> bool {
         let head = self.body.front().unwrap();
-        if head.x < 0 || head.x >= WIDTH || head.y < 0 || head.y >= HEIGHT {
+        if head.x < 0 || head.x >= 20 || head.y < 0 || head.y >= 20 {
             return true;
         }
 
@@ -62,3 +74,4 @@ impl Snake {
         *self.body.front().unwrap()
     }
 }
+

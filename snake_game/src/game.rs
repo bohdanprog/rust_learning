@@ -1,34 +1,35 @@
+use crate::snake::{Block, Snake};
 use rand::Rng;
-use crate::{Block, HEIGHT, WIDTH};
-use crate::snake::Snake;
 
 pub struct Game {
     pub snake: Snake,
     pub food: Block,
     pub grow: bool,
     pub game_over: bool,
+    pub welcome: bool,
 }
 
 impl Game {
-    pub fn new() -> Game {
-        Game {
-            snake: Snake::new(WIDTH / 2, HEIGHT / 2),
+    pub fn new() -> Self {
+        Self {
+            snake: Snake::new(10, 10),
             food: Game::new_food(),
             grow: false,
             game_over: false,
+            welcome: true
         }
     }
 
-    pub fn new_food() -> Block {
+    fn new_food() -> Block {
         let mut rng = rand::thread_rng();
         Block {
-            x: rng.gen_range(0..WIDTH),
-            y: rng.gen_range(0..HEIGHT),
+            x: rng.gen_range(0..20),
+            y: rng.gen_range(0..20),
         }
     }
 
     pub fn update(&mut self) {
-        if self.game_over {
+        if self.game_over || self.welcome {
             return;
         }
 
